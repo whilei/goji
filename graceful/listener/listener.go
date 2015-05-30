@@ -148,11 +148,11 @@ var errNotManaged = errors.New("listener: passed net.Conn is not managed by this
 // Disown causes a connection to no longer be tracked by the listener. The
 // passed connection must have been returned by a call to Accept from this
 // listener.
-func Disown(c net.Conn) error {
+func Disown(c net.Conn) (net.Conn, error) {
 	if cn, ok := c.(*conn); ok {
-		return cn.disown()
+		return cn.Conn, cn.disown()
 	}
-	return errNotManaged
+	return nil, errNotManaged
 }
 
 // MarkIdle marks the given connection as being idle, and therefore eligible for

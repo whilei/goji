@@ -84,7 +84,7 @@ func (f *fancyWriter) Hijack() (c net.Conn, b *bufio.ReadWriter, e error) {
 	c, b, e = hj.Hijack()
 
 	if e == nil {
-		e = listener.Disown(c)
+		c, e = listener.Disown(c)
 	}
 
 	return

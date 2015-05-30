@@ -58,7 +58,7 @@ func TestDisownedRead(t *testing.T) {
 	t.Parallel()
 	l, c, wc := singleConn(t, Deadline)
 
-	if err := Disown(wc); err != nil {
+	if _, err := Disown(wc); err != nil {
 		t.Fatalf("unexpected error disowning conn: %v", err)
 	}
 	if err := l.Close(); err != nil {
@@ -95,7 +95,7 @@ func TestDisownedClose(t *testing.T) {
 	t.Parallel()
 	_, c, wc := singleConn(t, Deadline)
 
-	if err := Disown(wc); err != nil {
+	if _, err := Disown(wc); err != nil {
 		t.Fatalf("unexpected error disowning conn: %v", err)
 	}
 	if err := wc.Close(); err != nil {

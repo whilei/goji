@@ -50,7 +50,7 @@ func (c connState) Wrap(nc net.Conn, s http.ConnState) {
 			log.Printf("error marking conn as idle: %v", err)
 		}
 	case http.StateHijacked:
-		if err := listener.Disown(nc); err != nil {
+		if _, err := listener.Disown(nc); err != nil {
 			log.Printf("error disowning hijacked conn: %v", err)
 		}
 	}

@@ -79,8 +79,10 @@ func TestDisown(t *testing.T) {
 	t.Parallel()
 	l, c, wc := singleConn(t, Manual)
 
-	if err := Disown(wc); err != nil {
+	if c2, err := Disown(wc); err != nil {
 		t.Fatalf("error disowning connection: %v", err)
+	} else if c2 != c {
+		t.Fatalf("disowned connection is different: %+v %+v", c, c2)
 	}
 	if err := l.CloseIdle(); err != nil {
 		t.Fatalf("error closing idle connections: %v", err)
@@ -126,7 +128,7 @@ func TestDrainAll(t *testing.T) {
 func TestErrors(t *testing.T) {
 	t.Parallel()
 	_, c, wc := singleConn(t, Manual)
-	if err := Disown(c); err == nil {
+	if _, err := Disown(c); err == nil {
 		t.Error("expected error when disowning unmanaged net.Conn")
 	}
 	if err := MarkIdle(c); err == nil {
@@ -136,10 +138,10 @@ func TestErrors(t *testing.T) {
 		t.Error("expected error when marking unmanaged net.Conn in use")
 	}
 
-	if err := Disown(wc); err != nil {
+	if _, err := Disown(wc); err != nil {
 		t.Fatalf("unexpected error disowning socket: %v", err)
 	}
-	if err := Disown(wc); err == nil {
+	if _, err := Disown(wc); err == nil {
 		t.Error("expected error disowning socket twice")
 	}
 }
